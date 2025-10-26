@@ -1,0 +1,69 @@
+class Bank:
+    # acc 1 -> balance 0
+    n = 0
+    account_balance = {}
+
+    def _account_valid(self, account: int):
+        if account <= 0 or account > self.n:
+            return False
+        return True
+    
+    def _precheck(self, account: int, requested_money: int):
+        # account is between 1 and n
+        if not self._account_valid(account):
+            return False, 0
+        # the amount withdrawn or transferred is less than or equal to the balance of account 
+        _account_balance = self.account_balance[account]
+        if requested_money > _account_balance:
+            return False, 0
+        return True, _account_balance
+    
+    def __init__(self, balance: List[int]):
+        self.n = len(balance)
+        # define index
+        for idx, balance in enumerate(balance):
+            self.account_balance[idx+1] = balance
+        
+
+    def transfer(self, account1: int, account2: int, money: int) -> bool:
+        check_acc_1, balance_acc_1 = self._precheck(account1, money)
+        check_acc_2 = self._account_valid(account2)
+        if not check_acc_1 or not check_acc_2:
+            return False
+        self.account_balance[account1] = balance_acc_1 - money
+        self.account_balance[account2] = self.account_balance[account2] + money
+        return True
+        
+
+    def deposit(self, account: int, money: int) -> bool:
+        check = self._account_valid(account)
+        if not check:
+            return False
+        self.account_balance[account] = self.account_balance[account] + money
+        return True
+        
+
+    def withdraw(self, account: int, money: int) -> bool:
+        check, balance = self._precheck(account, money)
+        if not check:
+            return False
+        self.account_balance[account] = self.account_balance[account] - money
+        return True
+        
+
+
+# Your Bank object will be instantiated and called as such:
+# obj = Bank(balance)
+# param_1 = obj.transfer(account1,account2,money)
+# param_2 = obj.deposit(account,money)
+# param_3 = obj.withdraw(account,money)
+        
+
+        
+
+
+# Your Bank object will be instantiated and called as such:
+# obj = Bank(balance)
+# param_1 = obj.transfer(account1,account2,money)
+# param_2 = obj.deposit(account,money)
+# param_3 = obj.withdraw(account,money)
